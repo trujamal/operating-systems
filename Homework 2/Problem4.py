@@ -13,11 +13,12 @@ import math
 # Distribution.] [10 pts]
 
 # Initialize array
-randomValArr = []
+largerValArr = []
 smallerValArr = []
 sizeL = 1000
 sizeS = 10
 
+# Function for calculating the CDF in which we solve for x
 def mathHandler(random_number, lambda_value):
     return -math.log(1-random_number)/lambda_value
 
@@ -27,22 +28,22 @@ for i in range(0,sizeS):
     our_randomNumber = our_randomNumber/sys.maxsize
     smallerValArr.append(mathHandler(our_randomNumber,10))
 
-print("Arrival Times")
-print
-print(smallerValArr)
-print
-
 # Running 1000 cases then taking the average.
 for i in range(0,sizeL):
     our_randomNumber = float(random.randint(0,sys.maxsize))
     our_randomNumber = our_randomNumber/sys.maxsize
-    smallerValArr.append(mathHandler(our_randomNumber,10))
+    largerValArr.append(mathHandler(our_randomNumber,10))
 
-resultingavg = (sum(smallerValArr)/sizeL) * 100
+resultingavg = (sum(largerValArr)/sizeL) * 100
 
+# Formatting
+print("Arrival Times")
+print
+print(smallerValArr)
+print
 print("Average Arrival Rate")
 print
 print(resultingavg)
-
+print
 
 print("Program Completed")
