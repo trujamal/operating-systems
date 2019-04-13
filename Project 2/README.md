@@ -17,36 +17,36 @@ git clone https://github.com/trujamal/operating-systems.git
 Navigate to the Project 2 folder within the repository
 
 How to run the file os_project_2.cpp:
-    1. On a Linux command line, run the following command  
+1. On a Linux command line, run the following command  
     
 ```
 gcc os_project_2.cpp -lpthread
 ```
 
-    2. Once that is proccessed then run the next following command
-    
+2. Once that is proccessed then run the next following command
+
 ```
     ./a.out 1
 ```
 
-#### Detailed 
-    1. Open an instance of the Linux command line
-    2. Change to the directory that contains the file pr2_scb.cpp
-    3. Type the following on the command line: gcc pr2_scb.cpp -lpthread 
-    4. Press 'Enter' 
-        * the program will compile and produce a new file in the directory
-        * the new file will be called a.out 
-    5. Type the following on the command line: ./a.out #
-        * where # is a non-negative integer value 
-        * the value will be used to seed rand() to produce a random card deck
-        * Example 1: ./a.out 123
-        * Example 2: ./a.out 5
-        * (note: if you do not provide an integer, the program will use 0 by default)
-    6. Press 'Enter'
-        * the program will run
-        * results will print to the console
-        * a log file called 'log.txt' will appear in the directory
+### Detailed  
 
+1. Open an instance of the Linux command line
+2. Change to the directory that contains the file pr2_scb.cpp
+3. Type the following on the command line: gcc pr2_scb.cpp -lpthread 
+4. Press 'Enter' 
+    * the program will compile and produce a new file in the directory
+    * the new file will be called a.out 
+5. Type the following on the command line: ./a.out #
+    * where # is a non-negative integer value 
+    * the value will be used to seed rand() to produce a random card deck
+    * Example 1: ./a.out 123
+    * Example 2: ./a.out 5
+    * (note: if you do not provide an integer, the program will use 0 by default)
+6. Press 'Enter'
+    * the program will run
+    * results will print to the console
+    * a log file called 'log.txt' will appear in the directory
 
 ## Usage
 
