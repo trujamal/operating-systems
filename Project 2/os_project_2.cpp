@@ -13,7 +13,8 @@
 #include <fstream>         
 #define NUM_THREADS 3 // Number of whitepsace threads.  
 
-pthread_mutex_t mutex_useDeck = PTHREAD_MUTEX_INITIALIZER;
+// Pthread Initialization
+pthread_mutex_t mutext_deck_handler = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t condition_var = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex_dealerExit = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t cond_win1 = PTHREAD_COND_INITIALIZER;
@@ -155,14 +156,14 @@ void *player_threads(void *playerId){
    }   
    
    while( win == 0 ){
-      pthread_mutex_lock(&mutex_useDeck); 
+      pthread_mutex_lock(&mutext_deck_handler); 
          while( pId != turn && win == 0 ){ 
-            pthread_cond_wait(&condition_var, &mutex_useDeck); 
+            pthread_cond_wait(&condition_var, &mutext_deck_handler); 
          }
          if( win == 0 ){   
             useTheDeck(pId, thisHand); 
          }         
-      pthread_mutex_unlock(&mutex_useDeck); 
+      pthread_mutex_unlock(&mutext_deck_handler); 
    }
    
    fprintf(pFile, "PLAYER %ld: exits round\n", pId); 
