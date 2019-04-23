@@ -24,8 +24,11 @@ Based upon the info within the repo here are the grades
 **Project 2:** ?????
 
 **Homework_1:**	34 /52	
+
 **Homework_2:**	74 /83
+
 **Homework_3:**	70 /70
+
 **Homework_4:**	?????
 
 
