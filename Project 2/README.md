@@ -29,11 +29,13 @@ gcc os_project_2.cpp -lpthread
     ./a.out 1
 ```
 
+3. Repalce the number one with any  number as that is your random seed number
+
 ### Detailed  
 
 1. Open an instance of the Linux command line
-2. Change to the directory that contains the file pr2_scb.cpp
-3. Type the following on the command line: gcc pr2_scb.cpp -lpthread 
+2. Change to the directory that contains the file os_project_2.cpp
+3. Type the following on the command line: gcc os_project_2.cpp -lpthread 
 4. Press 'Enter' 
     * the program will compile and produce a new file in the directory
     * the new file will be called a.out 
@@ -46,7 +48,7 @@ gcc os_project_2.cpp -lpthread
 6. Press 'Enter'
     * the program will run
     * results will print to the console
-    * a log file called 'log.txt' will appear in the directory
+    * a log file called 'report.txt' will appear in the directory
 
 ## Usage
 
