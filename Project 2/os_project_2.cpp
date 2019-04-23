@@ -1,14 +1,24 @@
-/*******************************************************************************
-*   course:       CS4328 
-*   project:      Project 2 - Pair War 
-*   programmer:   Jamal Rasool
-*******************************************************************************/
+/*
+* Card Matching Fight - a simple card game with one dealer, 3 players, and a single deck of cards.
+* Copyright (C) 2019 Jamal Rasool
+* Class: CS4328 Operating Systems
+* Date: Monday April 22nd 2019
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+*  of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions
+*/
 
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>         
+
 #define NUM_THREADS 3 // Number of threads due to the 3 test cases.  
+#define NUM_CARDS_IN_DECK 52 // Cards in deck
 #define PTHREADM PTHREAD_MUTEX_INITIALIZER
 #define PTHREADC PTHREAD_COND_INITIALIZER
 
@@ -36,98 +46,105 @@ FILE * output_file;
 // Declaration of Global Variables
 int round_counter = 1; //init to 1       
 int number_of_cases = 3;    
-int turn = 0;              
-const int NUM_CARDS = 52;  
-int deck[NUM_CARDS];       
-int *topOfDeck;            
-int *bottomOfDeck;         
-int seed = 0;              
-bool win = false;   
+int turn_val = 0;    
 
+// Other Intit
+int deck[NUM_CARDS_IN_DECK];       
+int *beginning_of_deck;            
+int *end_of_deck;         
+int seed_value = 0;              
+bool win_flag = false;   
 
-void *dealer_thread(void *arg);
-void *player_threads(void *playerId);
-void useTheDeck(long, Deck_init);
-void randSeed();
-void buildDeck();
-void shuffleDeck();
-void dealCards();
-void playRound();
+// Generating functions
 void parseArgs(char *[]);
+void generate_random_seed();
+void generate_deck();
 void print_output();
 
+// Player thread functions
+void *dealer_thread(void *arg);
+void *player_threads(void *current_player_id);
 
+// Deck Logic Handler
+void deck_handler(long, Deck_init);
+void shuffle_handler();
+void deal_handler();
+void round_handler();
 
-
-
-
-
-
+// Take in command Arguments
 void parseArgs(char *argv[]){ 
-   seed = atoi( argv[1] );
+   seed_value = atoi( argv[1] );
 } 
 
-
-void randSeed(){ 
-   srand(seed);
+// Generate random value and set to global variable
+void generate_random_seed(){ 
+   srand(seed_value);
 } 
 
-
-void buildDeck(){ 
-   int cardVal = 0, numInSuit = 4, card = 0;
-   while( (card < NUM_CARDS) && 
-          (cardVal < (NUM_CARDS/numInSuit)) ){
-      for( int i = 0; i < numInSuit; i++ ){
-         deck[card] = cardVal;
-         card++;
+// Card Logic
+void generate_deck(){ 
+   int card_counter = 0, suit_count = 4, card_at_hand = 0;
+   while( (card_at_hand < NUM_CARDS_IN_DECK) && 
+          (card_counter < (NUM_CARDS_IN_DECK/suit_count)) ){
+      for( int i = 0; i < suit_count; i++ ){
+         deck[card_at_hand] = card_counter;
+         card_at_hand++;
       }
-      cardVal++;
+      card_counter++;
    }    
-   topOfDeck = deck;          
-   bottomOfDeck = deck + 51;  
+   beginning_of_deck = deck;          
+   end_of_deck = deck + 51;  
 } 
 
-
-void playRound(){ 
+// Printing output data for rounds
+void round_header(){
+   printf("---------------------------------------------------------------------------------------------------------------\n");
    printf("ROUND: %d ................\n", round_counter);
+   printf("---------------------------------------------------------------------------------------------------------------\n");
+   fprintf(output_file,"---------------------------------------------------------------------------------------------------------------\n");
    fprintf(output_file, "ROUND: %d ................\n", round_counter);
-           
-   
-   int retD = pthread_create(&dealer_threads_handler, NULL, &dealer_thread, NULL);
-            
-   
-   int retP;
-   for( long i = 1; i <= NUM_THREADS; i++ ){
-      retP = pthread_create(&player_threads_handler[i], NULL, &player_threads, (void *)i);
-   }
+   fprintf(output_file,"---------------------------------------------------------------------------------------------------------------\n");
+}
 
-   
+void round_handler(){ 
+   // printing out the data 
+   round_header();
+
+   int round_Dealer = pthread_create(&dealer_threads_handler, NULL, &dealer_thread, NULL);
+   int round_Player;   
+
+   for( long a = 1; a <= NUM_THREADS; a++)
+      round_Player = pthread_create(&player_threads_handler[a], NULL, &player_threads, (void *)a);
+
+   // J\joinning threads
    pthread_join(dealer_threads_handler, NULL); 
-   for( int j = 0; j < 3; j++ ){
-      pthread_join(player_threads_handler[j], NULL); 
-   }
+
+   for(int b = 0; b < 3; b++)
+      pthread_join(player_threads_handler[b], NULL); 
 } 
 
-
+// Dealer logic
 void *dealer_thread(void *arg){ 
-   long pId = 0;       
-   turn = 0;           
    Deck_init dealerHand;    
-   useTheDeck(pId, dealerHand); 
+   long process_id = 0;       
+   turn_val = 0;           
+   deck_handler(process_id, dealerHand); 
    
-   
+   // Waiting conditions
    pthread_mutex_lock(&mutext_exit_cond);  
-      while( !win ){
+      while(!win_flag ){
          pthread_cond_wait(&win_condition, &mutext_exit_cond);
       }      
    pthread_mutex_unlock(&mutext_exit_cond); 
-   fprintf(output_file, "DEALER: exits round\n");  
+   fprintf(output_file, "DEALER: stops round\n");  
+
+   // Exit condition
    pthread_exit(NULL);
 } 
 
 
-void *player_threads(void *playerId){ 
-   long pId = (long)playerId;
+void *player_threads(void *current_player_id){ 
+   long pId = (long)current_player_id;
    
    
    Deck_init thisHand;
@@ -147,13 +164,13 @@ void *player_threads(void *playerId){
       else thisHand = player_hand_3;
    }   
    
-   while( win == 0 ){
+   while(win_flag == 0 ){
       pthread_mutex_lock(&mutext_deck_handler); 
-         while( pId != turn && win == 0 ){ 
+         while( pId != turn_val && win_flag == 0 ){ 
             pthread_cond_wait(&exclusion_variable, &mutext_deck_handler); 
          }
-         if( win == 0 ){   
-            useTheDeck(pId, thisHand); 
+         if(win_flag == 0 ){   
+            deck_handler(pId, thisHand); 
          }         
       pthread_mutex_unlock(&mutext_deck_handler); 
    }
@@ -163,20 +180,17 @@ void *player_threads(void *playerId){
 } 
 
 
-void useTheDeck(long pId, Deck_init thisHand){
+void deck_handler(long pId, Deck_init thisHand){
    if( pId == 0 ){ 
    
-      fprintf(output_file, "DEALER: shuffle\n"); shuffleDeck(); 
-      fprintf(output_file, "DEALER: deal\n"); dealCards();      
+      fprintf(output_file, "DEALER: shuffle\n"); shuffle_handler(); 
+      fprintf(output_file, "DEALER: deal\n"); deal_handler();      
    }    
    else{ 
-   
-      
       fprintf(output_file, "PLAYER %ld: hand %d \n", pId, thisHand.card1);
-      
-      
-      thisHand.card2 = *topOfDeck, 
-      topOfDeck = topOfDeck + 1;
+
+      thisHand.card2 = *beginning_of_deck, 
+      beginning_of_deck = beginning_of_deck + 1;
       fprintf(output_file, "PLAYER %ld: draws %d \n", pId,thisHand.card2); 
       
       
@@ -188,16 +202,16 @@ void useTheDeck(long pId, Deck_init thisHand){
          
          printf("WIN yes\n");      
          fprintf(output_file, "PLAYER %ld: wins\n", pId);
-         win = true;   
+         win_flag = true;   
          pthread_cond_signal(&win_condition); 
       }
       else{
          
          printf("WIN no\n");    
          
-         topOfDeck = topOfDeck - 1;       
-         int *ptr = topOfDeck;
-         while( ptr != bottomOfDeck ){
+         beginning_of_deck = beginning_of_deck - 1;       
+         int *ptr = beginning_of_deck;
+         while( ptr != end_of_deck ){
             *ptr = *(ptr + 1);
             ptr = ptr + 1;      
          }         
@@ -205,26 +219,26 @@ void useTheDeck(long pId, Deck_init thisHand){
          int discard = rand()%2;
          if( discard == 0 ){
             fprintf(output_file, "PLAYER %ld: discards %d \n", pId, thisHand.card1);   
-            *bottomOfDeck = thisHand.card1;  
+            *end_of_deck = thisHand.card1;  
             thisHand.card1 = thisHand.card2; 
          }     
          else{
             fprintf(output_file, "PLAYER %ld: discards %d \n", pId, thisHand.card2);             
-            *bottomOfDeck = thisHand.card2;
+            *end_of_deck = thisHand.card2;
          }   
          
          print_output();                 
       }      
    }  
-   turn ++; 
-   if( turn > NUM_THREADS ) turn = 1;      
+   turn_val ++; 
+   if( turn_val > NUM_THREADS ) turn_val = 1;      
    pthread_cond_broadcast(&exclusion_variable); 
 } 
 
 
-void shuffleDeck(){ 
-   for( int i = 0; i < (NUM_CARDS - 1); i++ ){
-      int randPos = i + (rand() % (NUM_CARDS - i));  
+void shuffle_handler(){ 
+   for( int i = 0; i < (NUM_CARDS_IN_DECK - 1); i++ ){
+      int randPos = i + (rand() % (NUM_CARDS_IN_DECK - i));  
       int temp = deck[i];
       deck[i] = deck[randPos]; 
       deck[randPos] = temp;
@@ -232,22 +246,22 @@ void shuffleDeck(){
 } 
 
 
-void dealCards(){ 
-   player_hand_1.card1 = *topOfDeck; topOfDeck = topOfDeck + 1; 
-   player_hand_2.card1 = *topOfDeck; topOfDeck = topOfDeck + 1;  
-   player_hand_3.card1 = *topOfDeck; topOfDeck = topOfDeck + 1;          
+void deal_handler(){ 
+   player_hand_1.card1 = *beginning_of_deck; beginning_of_deck = beginning_of_deck + 1; 
+   player_hand_2.card1 = *beginning_of_deck; beginning_of_deck = beginning_of_deck + 1;  
+   player_hand_3.card1 = *beginning_of_deck; beginning_of_deck = beginning_of_deck + 1;          
 } 
 
 
 void print_output(){ 
    printf("DECK: ");
    fprintf(output_file, "DECK: ");    
-   int *ptr = topOfDeck;
-   while( ptr != bottomOfDeck ){
+   int *ptr = beginning_of_deck;
+   while( ptr != end_of_deck ){
       printf("%d ", *ptr);
       fprintf(output_file, "%d ", *ptr);
       ptr++;
-      if( ptr == bottomOfDeck ){
+      if( ptr == end_of_deck ){
          printf("%d \n", *ptr);
          fprintf(output_file, "%d \n", *ptr);     
       }      
@@ -256,18 +270,17 @@ void print_output(){
 
 
 int main(int argc, char *argv[]){
-   output_file = fopen("log.txt", "a"); 
+   output_file = fopen("report.txt", "a"); 
    parseArgs(argv);               
-   randSeed();                    
-   buildDeck();                   
+   generate_random_seed();                    
+   generate_deck();                   
    
-   while( round_counter <= 
-          number_of_cases ){
-      playRound();                
+   while(round_counter <= number_of_cases ){
+      round_handler();                
       round_counter++;                 
-      win = false;                
+      win_flag = false;                
    }
-   
+
    fclose(output_file);                 
    exit(EXIT_SUCCESS);
 } 

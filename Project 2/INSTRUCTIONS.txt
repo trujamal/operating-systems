@@ -1,17 +1,17 @@
 INSTRUCTIONS
 
-How to run the file pr2_scb.cpp:
+How to run the file os_project_2.cpp:
 
 QUICK START:_____________________________________________
-1. On a Linux command line, type: gcc pr2_scb.cpp -lpthread
+1. On a Linux command line, type: gcc os_project_2.cpp -lpthread
 2. Press 'Enter'
 3. Next, type: ./a.out 1
 4. Press 'Enter'
 
 DETAILED:_____________________________________________
 1. Open an instance of the Linux command line
-2. Change to the directory that contains the file pr2_scb.cpp
-3. Type the following on the command line: gcc pr2_scb.cpp -lpthread 
+2. Change to the directory that contains the file os_project_2.cpp
+3. Type the following on the command line: gcc os_project_2.cpp -lpthread 
 4. Press 'Enter' 
    - the program will compile and produce a new file in the directory
    - the new file will be called a.out 
