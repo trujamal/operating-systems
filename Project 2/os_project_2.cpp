@@ -1,6 +1,6 @@
 /*
 * Card Matching Fight - a simple card game with one dealer, 3 players, and a single deck of cards.
-* Copyright (C) 2019 Jamal Rasool
+* Copyright (C) 2019 Jamal Rasool & Kristof York
 * Class: CS4328 Operating Systems
 * Date: Monday April 22nd 2019
 *
