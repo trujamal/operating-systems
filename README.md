@@ -21,7 +21,8 @@ Based upon the info within the repo here are the grades
 **Project 1:**	92 /105	
 >CS4328: Operating System Project One Grade Sheet Design[30]     (1)Simulator and events[15] ----- 15     (2)Schedulers and Ready queue[15] ---- 15       Results[60]     (1)FCFS[15] ---- 13 (-2 points for the results of average processes in ready queue are not correct)     (2)HRRN[15] ---- 13 (-2 points for the results of average processes in ready queue are not correct)      (3)SRTF[15] ----  13 (-2 points for the results of average processes in ready queue are not correct)     (4)RR[15] ---- 13 (-2 points for the results of average processes in ready queue are not correct) Documentation, report, and explanation of results[10] ----  10 Total: 92 Extra: 0  Late: 0 Final Grade: 92  
 
-**Project 2:** 'From other semsters you don't get your grade back'
+**Project 2:** 90/100
+>CS4328: Operating System Project2 Grading Sheet Design[30]  -- 30 (1)Using pthread format (2)Should not use sleep to synchronize threads Results[65] --55  (1)The program can start running without syntax error[10] --   (2)Created four threads[15] --  (3)Thread create once not in every round[10] -- 5 (-5 points, should not creat four threads in each round) (4)log or display shows the results correctly[10] --   (5)Can run several times without deadlock [10] --   (6)Player in correct order [10] -- 5 (-5 points, the second should start with player2 and the third round starts with player3) Report[5] -- 5     Total: 90 Late: Final Grade: 90
 
 **Homework_1:**	34 /52	
 
