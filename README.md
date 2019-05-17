@@ -32,12 +32,24 @@ Based upon the info within the repo here are the grades
 
 **Homework_4:**	36/40
 
-#### Exams
+### Exams
 These exams are not based off of the review he gives in class, only some portions of it come from the homeworks, while most of the exams definitions come from the book instead some helpful resources you can use are listed below.
 
 [OS Book Slides](https://www.os-book.com/OS9/slide-dir/index.html)
+
 [OS Book Answers](http://os-book.com/OS9/practice-exer-dir/index.html)
 
+### Grading Structure
+
+* Above 85% -> A
+* Between 70% and 85% -> B
+* Between 49% and 70% -> C
+* Between 40% and 50% -> D
+* Below 40% -> F
+
+This is due to the homework accounting for 10%, projects for 20%, midterm 30% and final 40%.
+
+By any means if you do okay on the exams and on the projects you have a high chance of easily passing the course and getting magnum cum lade if all the stars align correctly.
 
 ### Setup Keys
 If there must be any key generation link it in this section
